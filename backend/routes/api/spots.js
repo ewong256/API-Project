@@ -67,9 +67,23 @@ router.get('/', async (req, res) => {
 // Get all spots from current user
 router.get('/current', requireAuth, async(req, res) => {
     const userId = req.user.id
+
     const currSpots = await Spot.findAll({
         where: { ownerId: userId }
     })
+    for(let spot of currSpots) {
+        const reviews = await spot.getReviews()
+        const spotImages = await spot.getSpotImages()
+
+        const total = reviews.reduce(
+            (sum, review) => sum + review.stars, 0
+        )
+
+        const rateAvg = total / reviews.length
+
+        spot.dataValues.avgRating = rateAvg
+        spot.dataValues.previewImage = spotImages[0].url
+    }
     res.status(200).json({Spots: currSpots})
 })
 
@@ -86,10 +100,22 @@ router.get('/:spotId', async (req, res) => {
             },
             {
                 model: User,
+                as: 'Owner',
                 attributes: ['id', 'firstName', 'lastName']
             }
         ]
     })
+    const reviews = await spot.Reviews
+
+    const total = reviews.reduce(
+        (sum, review) => sum + review.stars, 0
+    )
+    
+    const rateAvg = total / reviews.length
+
+    spot.dataValues.numReviews = reviews.length
+    spot.dataValues.avgRating = rateAvg
+
     return res.status(200).json(spot)
 })
 
