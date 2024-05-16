@@ -43,13 +43,26 @@ const validateSpot = [
 // Get all spots
 router.get('/', async (req, res) => {
     const spots = await Spot.findAll({
-        include: [
-            {model: Review, attributes: ['stars']},
-            {model: SpotImage, attributes: ['url', 'preview']}
-        ]
+        // include: [
+        //     { model: Review, attributes: ['stars'] },
+        //     { model: SpotImage, attributes: ['url', 'preview'] }
+        // ]
     });
-    return res.status(200).json(spots)
+    for(let spot of spots) {
+        const reviews = await spot.getReviews()
+        const spotImages = await spot.getSpotImages()
+
+        const total = reviews.reduce(
+            (sum, review) => sum + review.stars, 0
+        )
+        const rateAvg = total / reviews.length
+        spot.dataValues.avgRating = rateAvg
+        spot.dataValues.previewImage = spotImages[0].url
+    }
+    return res.status(200).json({Spots: spots})
 });
+
+
 
 // Get all spots from current user
 router.get('/current', requireAuth, async(req, res) => {
