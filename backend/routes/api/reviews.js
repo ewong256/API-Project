@@ -54,6 +54,7 @@ router.get("/current", requireAuth, async (req, res) => {
         Review.previewImage = review.Spot.SpotImages[0].url;
         delete Review.Spot.SpotImages;
         return Review;
+        
     });
     res.status(200).json(reviews);
   });

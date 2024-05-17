@@ -93,6 +93,7 @@ router.delete('/:bookingId', requireAuth, async (req, res, next) => {
         err.title = 'Resource not found'
         err.errors = { message: 'Booking could not be found'}
     }
+
     if(userId !== booking.userId) {
         const err = new Error('Must own the booking to edit')
         err.status = 403
@@ -100,6 +101,7 @@ router.delete('/:bookingId', requireAuth, async (req, res, next) => {
         err.errors= { message: 'Unauthorized for this action'}
         return next(err)
     }
+    
     if (booking.startDate <= Date.now()) {
         const err = new Error('Cannot delete past bookings');
         err.status = 403;
