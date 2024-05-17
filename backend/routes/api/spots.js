@@ -179,11 +179,13 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
         err.errors= { message: 'Unauthorized for this action'}
         return next(err)
     }
+    
     const newImage = await SpotImage.create({
-        spotId: spot.id,
+        spotId: currSpot.id,
         url,
         preview
     })
+
     res.status(200).json({
         id: newImage.id,
         url: newImage.url,
