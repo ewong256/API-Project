@@ -179,7 +179,7 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
         err.errors= { message: 'Unauthorized for this action'}
         return next(err)
     }
-    
+
     const newImage = await SpotImage.create({
         spotId: currSpot.id,
         url,
@@ -260,11 +260,12 @@ router.get('/:spotId/reviews', async(req, res) => {
     const spotId = req.params.spotId
 
     const spot = await Spot.findByPk(spotId)
+
     if(!spot) {
-        const err = new Error('Could not find spot with the specified id')
+        const err = new Error('Resource not found')
         err.status = 404
         err.title = 'Resource not found'
-        err.errors = { message: `Spot couldn't be found`}
+        err.errors = { message: `Resource not found`}
         return next(err)
     }
 
