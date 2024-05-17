@@ -31,15 +31,83 @@ router.get('/current', requireAuth, async(req, res) => {
                     'name',
                     'price',
                     'state'
+                ],
+                include: [
+                    {
+                        model: SpotImage,
+                        attributes: { exclude: [ 'createdAt', 'updatedAt' ]}
+                    }
                 ]
             }
         ],
-        include: [
-            {
-                model: SpotImage,
-                attributes: { exclude: [ 'createdAt', 'updatedAt' ]}
-            }
-        ]
     })
     res.status(200).json({ Bookings: bookings })
 })
+
+// Edit a booking
+router.put('/:bookingId', requireAuth, async (req, res, next) => {
+    const bookingId = req.params.bookingId
+    const userId = req.user.id
+
+    const { startDate, endDate } = req.body
+
+    const booking = await Booking.findByPk(bookingId)
+
+    if(!booking) {
+        const err = new Error('Resource not found')
+        err.status = 404
+        err.title = 'Resource not found'
+        err.errors = { message: 'Booking could not be found'}
+    }
+    if(userId !== booking.userId) {
+        const err = new Error('Must own the booking to edit')
+        err.status = 403
+        err.title = 'Forbidden'
+        err.errors= { message: 'Unauthorized for this action'}
+        return next(err)
+    }
+
+    booking.startDate = startDate
+    booking.endDate = endDate
+    await booking.save()
+    res.status(200).json(booking)
+})
+
+// Delete a booking
+router.delete('/:bookingId', requireAuth, async (req, res, next) => {
+    const bookingId = req.params.bookingId
+    const userId = req.user.id
+
+    const booking = await Booking.findByPk(bookingId)
+
+    if(!booking) {
+        const err = new Error('Resource not found')
+        err.status = 404
+        err.title = 'Resource not found'
+        err.errors = { message: 'Booking could not be found'}
+    }
+    if(userId !== booking.userId) {
+        const err = new Error('Must own the booking to edit')
+        err.status = 403
+        err.title = 'Forbidden'
+        err.errors= { message: 'Unauthorized for this action'}
+        return next(err)
+    }
+    if (booking.startDate <= Date.now()) {
+        const err = new Error('Cannot delete past bookings');
+        err.status = 403;
+        err.errors = { message: 'Cannot delete past bookings' };
+        err.title = 'Forbidden'
+        return next(err);
+    };
+
+    await booking.destroy()
+
+    res.status(200).json(
+        {
+            message: 'Successfully deleted'
+        }
+    )
+})
+
+module.exports = router

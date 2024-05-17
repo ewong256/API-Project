@@ -1,11 +1,11 @@
 const express = require('express')
 
-const { User, Spot, Review, SpotImage, ReviewImage } = require('../../db/models')
+const { User, Spot, Review, SpotImage, ReviewImage, Booking } = require('../../db/models')
 
 const { requireAuth } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-
+const { Op } = require('sequelize')
 
 const router = express.Router()
 
@@ -56,6 +56,7 @@ const validateReview = [
 // Get all spots
 router.get('/', async (req, res) => {
     const spots = await Spot.findAll({
+        // Old code
         // include: [
         //     { model: Review, attributes: ['stars'] },
         //     { model: SpotImage, attributes: ['url', 'preview'] }
@@ -312,5 +313,67 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res, nex
     res.status(201).json(newReview)
 })
 
+// Get all bookings from spotId
+router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
+    const spotId = req.params.spotId
+    const userId = req.user.id
+
+    const spot = await Spot.findByPk(spotId, {
+        include: {
+            model: Booking,
+            include: {
+                model: User,
+                attributes: ['id', 'firstName', 'lastName']
+            }
+        }
+    })
+    const bookings = await Booking.findAll({
+        where: {
+            spotId: spotId
+        }
+    })
+    res.status(200).json({ Bookings: bookings })
+})
+
+
+
+// Create booking from spotId
+router.post('/:spotId/bookings', requireAuth, async (req, res) => {
+    const spotId = req.params.spotId
+    const userId = req.user.id
+    const { startDate, endDate } = req.body
+
+    const spot = await Spot.findByPk(spotId)
+
+    if(!spot) {
+        const err = new Error('Spot not found')
+        err.status = 404
+        throw err
+    }
+
+    const bookingExists = await Booking.findOne({
+        where: {
+            spotId,
+            [Op.or]: [
+                {startDate: {[Op.between]: [startDate, endDate]}},
+                {endDate: {[Op.between]: [startDate, endDate]}}
+            ]
+        }
+    })
+
+    if(bookingExists) {
+        const err = new Error('A booking already exists for the specified date')
+        err.status = 403
+        throw err
+    }
+
+    const newBooking = await Booking.create({
+        userId,
+        spotId,
+        startDate,
+        endDate
+    })
+    res.status(201).json(newBooking)
+})
 
 module.exports = router
