@@ -5,7 +5,7 @@ const { User, Spot, Review, SpotImage, ReivewImage } = require('../../db/models'
 const { requireAuth } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const spot = require('../../db/models/spot');
+
 
 const router = express.Router()
 
@@ -110,7 +110,7 @@ router.get('/:spotId', async (req, res) => {
     const total = reviews.reduce(
         (sum, review) => sum + review.stars, 0
     )
-    
+
     const rateAvg = total / reviews.length
 
     spot.dataValues.numReviews = reviews.length
