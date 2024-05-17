@@ -66,6 +66,13 @@ router.put('/:bookingId', requireAuth, async (req, res, next) => {
         err.errors= { message: 'Unauthorized for this action'}
         return next(err)
     }
+    if (booking.startDate <= Date.now()) {
+        const err = new Error('Cannot edit past bookings');
+        err.status = 403;
+        err.errors = { message: 'Cannot edit past bookings' };
+        err.title = 'Forbidden'
+        return next(err);
+    };
 
     booking.startDate = startDate
     booking.endDate = endDate
