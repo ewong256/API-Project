@@ -5,6 +5,8 @@ const { User, Spot, Review, SpotImage, ReviewImage } = require('../../db/models'
 const { requireAuth } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
+const spotimage = require('../../db/models/spotimage');
+const { ResultWithContextImpl } = require('express-validator/src/chain');
 
 
 const router = express.Router()
@@ -49,20 +51,32 @@ router.get("/current", requireAuth, async (req, res) => {
       ],
     });
 
-    const reviews = allReviews.map((review) => {
-        const Review = review.toJSON();
-        Review.previewImage = review.Spot.SpotImages[0].url;
-        delete Review.Spot.SpotImages;
-        return Review;
-        
-    });
-    res.status(200).json(reviews);
+    const reviews = []
+
+    allReviews.forEach(review => {
+        const jsReview = review.toJSON()
+        reviews.push(jsReview)
+    })
+
+    reviews.forEach(review => {
+        const spotImages = review.Spot.spotImages
+        if(spotImages && spotImages.length > 0) {
+            const url = spotImages[0]
+            review.Spot.previewImage = url
+        }
+        else {
+            review.Spot.previewImage = null
+        }
+        delete review.Spot.SpotImages
+    })
+    res.status(200).json({ Reviews: reviews })
   });
 
 
 // Add an image based on Review id
 router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
     const reviewId = req.params.reviewId
+    const userId = req.user.id
 
     const { url } = req.body
 
@@ -72,6 +86,37 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
             include: SpotImage
         }
     })
+
+    if(!review) {
+        const err = new Error('Review could not be found')
+        err.status = 404
+        err.title = 'Resource not found'
+        err.errors = { message: 'Review could not be found'}
+        return next(err)
+    }
+
+    if(userId !== review.userId) {
+        const err = new Error('Must own this review to delete')
+        err.status = 403
+        err.title = 'Forbidden'
+        err.errors= { message: 'Unauthorized for this action'}
+        return next(err)
+    }
+
+
+    const reviewImages = await ReviewImage.findAll({
+        where: {
+            reviewId: review.id
+        }
+    })
+
+    if(reviewImages >= 10) {
+        const err = new Error('Maximum number of images for this resource was reached')
+        err.status = 403
+        err.title = 'Image Overflow'
+        err.errors = { message: 'Maximum number of images for this resource was reached' }
+    }
+
     const newReviewImage = await ReviewImage.create({
         reviewId: review.id,
         url
@@ -85,9 +130,26 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
 // Update review from /:reviewId
 router.put('/:reviewId', requireAuth, validateReview, async (req, res, next) => {
     const reviewId = req.params.reviewId
+    const userId = req.user.id
     const { review, stars } = req.body
 
     const updateReview = await Review.findByPk(reviewId)
+
+    if(!updateReview) {
+        const err = new Error('Review could not be found')
+        err.status = 404
+        err.title = 'Resource not found'
+        err.errors = { message: 'Review could not be found'}
+        return next(err)
+    }
+
+    if(userId !== updateReview.userId) {
+        const err = new Error('Must own this review to edit')
+        err.status = 403
+        err.title = 'Forbidden'
+        err.errors= { message: 'Unauthorized for this action'}
+        return next(err)
+    }
 
     updateReview.review = review
     updateReview.stars = stars
@@ -99,8 +161,25 @@ router.put('/:reviewId', requireAuth, validateReview, async (req, res, next) => 
 // Delete a review from /:reviewId
 router.delete('/:reviewId', requireAuth, async (req, res, next) => {
     const reviewId = req.params.reviewId
+    const userId = req.user.id
 
     const deleteReview = await Review.findByPk(reviewId)
+
+    if(!deleteReview) {
+        const err = new Error('Review could not be found')
+        err.status = 404
+        err.title = 'Resource not found'
+        err.errors = { message: 'Review could not be found'}
+        return next(err)
+    }
+
+    if(userId !== deleteReview.userId) {
+        const err = new Error('Must own this review to edit')
+        err.status = 403
+        err.title = 'Forbidden'
+        err.errors= { message: 'Unauthorized for this action'}
+        return next(err)
+    }
 
     await deleteReview.destroy()
 
