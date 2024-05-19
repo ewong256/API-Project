@@ -169,7 +169,7 @@ router.get('/current', requireAuth, async(req, res) => {
         spot.dataValues.avgRating = rateAvg
         spot.dataValues.previewImage = spotImages ? spotImages[0].url : null
     }
-    res.status(200).json({Spots: currSpots})
+    res.status(200).json({ Spots: currSpots })
 })
 
 // Get details of Spot from an id
@@ -208,21 +208,21 @@ router.get('/:spotId', async (req, res, next) => {
     const rateAvg = numReviews > 0 ? (starRatings.reduce((acc, sum) => acc + sum)) / numReviews : 0
 
     const formattedSpot = {
-        id,
+        id: spot.id,
         ownerId,
-        address,
-        city,
-        state,
-        lat,
-        lng,
-        name,
-        description,
-        price,
-        createdAt,
-        updatedAt,
+        address: spot.address,
+        city: spot.city,
+        state: spot.state,
+        lat: spot.lat,
+        lng: spot.lng,
+        name: spot.name,
+        description: spot.description,
+        price: spot.price,
+        createdAt: spot.createdAt,
+        updatedAt: spot.updatedAt,
         numReviews: numReviews,
         avgStarRating: rateAvg,
-        SpotImages: SpotImages || null,
+        SpotImages: spot.SpotImages || null,
         Owner: Owner
     }
 
