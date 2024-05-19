@@ -10,7 +10,7 @@ const router = express.Router()
 
 // Delete a spotImage
 router.delete('/:imageId', requireAuth, async(req, res, next) => {
-    const userId = req.user.userId
+    const userId = req.user.id
     const imageId = req.params.imageId
 
     const spotImage = await SpotImage.findByPk(imageId, { include: { model: Spot } }

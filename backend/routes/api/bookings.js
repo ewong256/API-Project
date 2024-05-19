@@ -14,7 +14,7 @@ router.get('/current', requireAuth, async(req, res) => {
     const userId = req.user.id
     const bookings = await Booking.findAll({
         where: {
-            userid: userId
+            userId: userId
         },
         include: [
             {
@@ -65,10 +65,9 @@ router.get('/current', requireAuth, async(req, res) => {
 // Edit a booking
 router.put('/:bookingId', requireAuth, async (req, res, next) => {
     const bookingId = req.params.bookingId
-    const spotId = req.params.spotId
     const userId = req.user.id
 
-    const { startDate, endDate } = req.body
+    const { startDate, endDate, spotId } = req.body
 
     const booking = await Booking.findByPk(bookingId)
 

@@ -11,7 +11,7 @@ const router = express.Router()
 // Delete a reviewImage
 router.delete('/:imageId', requireAuth, async(req, res, next) => {
 
-    const userId = req.user.userId
+    const userId = req.user.id
     const imageId = req.params.imageId
 
     const reviewImage = await ReviewImage.findByPk(imageId, { include: { model: Review } }
@@ -27,7 +27,7 @@ router.delete('/:imageId', requireAuth, async(req, res, next) => {
     }
 
     if(userId !== reviewImage.userId) {
-        const err = new Error('Must own the booking to edit')
+        const err = new Error('Must own the image to edit')
         err.status = 403
         err.title = 'Forbidden'
         err.errors= { message: 'Unauthorized for this action'}
