@@ -223,7 +223,7 @@ router.get('/:spotId', async (req, res, next) => {
         numReviews: numReviews,
         avgStarRating: rateAvg,
         SpotImages: spot.SpotImages || null,
-        Owner: Owner
+        Owner: spot.Owner
     }
 
 
