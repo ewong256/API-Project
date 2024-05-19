@@ -201,8 +201,6 @@ router.get('/:spotId', async (req, res, next) => {
         return next(err)
     }
 
-    const { id, ownerId, address, city, state, lat, lng, name, description, price, createdAt, updatedAt, SpotImages, Owner } = spot
-
     const starRatings = spot.Reviews.map(review => review.stars)
 
     const numReviews = spot.Reviews.length
@@ -494,6 +492,13 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
         return next(err)
     }
 
+    if(userId === spot.ownerId) {
+        const err = new Error('Cannot create a booking for a spot you own')
+        err.status = 403
+        err.title = 'Forbidden'
+        err.errors= { message: 'Unauthorized for this action'}
+        return next(err)
+    }
 
     const bookingExists = await Booking.findOne({
         where: {
@@ -504,14 +509,6 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
             ]
         }
     })
-
-    if(userId !== bookingExists.userId) {
-        const err = new Error('Must own the booking to edit')
-        err.status = 403
-        err.title = 'Forbidden'
-        err.errors= { message: 'Unauthorized for this action'}
-        return next(err)
-    }
 
     if(bookingExists) {
         const err = new Error('A booking already exists for the specified date')
