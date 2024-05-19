@@ -192,7 +192,6 @@ router.get('/:spotId', async (req, res, next) => {
         ]
     })
 
-    const { id, ownerId, address, city, state, lat, lng, name, description, price, createdAt, updatedAt, SpotImages, Owner } = spot
 
     if(!spot) {
         const err = new Error('Resource not found')
@@ -201,6 +200,8 @@ router.get('/:spotId', async (req, res, next) => {
         err.errors = { message: 'Resource not found' }
         return next(err)
     }
+
+    const { id, ownerId, address, city, state, lat, lng, name, description, price, createdAt, updatedAt, SpotImages, Owner } = spot
 
     const starRatings = spot.Reviews.map(review => review.stars)
 
