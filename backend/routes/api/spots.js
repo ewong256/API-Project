@@ -494,6 +494,7 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
         return next(err)
     }
 
+
     const bookingExists = await Booking.findOne({
         where: {
             spotId,
@@ -503,6 +504,14 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
             ]
         }
     })
+
+    if(userId !== bookingExists.userId) {
+        const err = new Error('Must own the booking to edit')
+        err.status = 403
+        err.title = 'Forbidden'
+        err.errors= { message: 'Unauthorized for this action'}
+        return next(err)
+    }
 
     if(bookingExists) {
         const err = new Error('A booking already exists for the specified date')
