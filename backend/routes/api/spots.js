@@ -209,7 +209,7 @@ router.get('/:spotId', async (req, res, next) => {
 
     const formattedSpot = {
         id: spot.id,
-        ownerId,
+        ownerId: spot.ownerId,
         address: spot.address,
         city: spot.city,
         state: spot.state,
