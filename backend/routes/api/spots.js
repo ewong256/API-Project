@@ -57,7 +57,7 @@ const validateQuery = [
         .withMessage('Minimum lat cannot be less than -90'),
     check('maxLat')
         .optional()
-        .isFloat({ max: -90 })
+        .isFloat({ max: 90 })
         .withMessage('Maximum lat cannot be more than 90'),
     check('minLng')
         .optional()
@@ -92,7 +92,21 @@ const validateReview = [
 
 // Get all spots
 router.get('/', validateQuery, async (req, res) => {
-    let { page, size } = req.query
+    let { page, size, minLat, maxLat, minLng, maxLng } = req.query
+
+    let where = {}
+
+    minLat = minLat ? minLat : -90
+    maxLat = maxLat ? maxLat : 90
+    minLng = minLng ? minLng : -180
+    maxLng = maxLng ? maxLng : 180
+    minPrice = minPrice ? minPrice : 0
+    maxPrice = maxPrice ? maxPrice : 1000
+
+    where.lat = { [ Op.between ] : [ minLat, maxLat ] }
+    where.lng = { [ Op.between ] : [ minLng, maxLng ] }
+    where.price = { [ Op.between ] : [ minPrice, maxPrice ] }
+
 
     const pagination = {}
 
@@ -109,6 +123,7 @@ router.get('/', validateQuery, async (req, res) => {
     }
 
     const spots = await Spot.findAll({
+        where,
         ...pagination
     });
 

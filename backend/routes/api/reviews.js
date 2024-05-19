@@ -5,8 +5,7 @@ const { User, Spot, Review, SpotImage, ReviewImage } = require('../../db/models'
 const { requireAuth } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const spotimage = require('../../db/models/spotimage');
-const { ResultWithContextImpl } = require('express-validator/src/chain');
+
 
 
 const router = express.Router()

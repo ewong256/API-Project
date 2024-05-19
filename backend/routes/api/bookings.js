@@ -41,7 +41,7 @@ router.get('/current', requireAuth, async(req, res) => {
             }
         ],
     })
-    
+
     const resBookings = []
     bookings.forEach(booking => {
         const jsBooking = booking.toJSON()
@@ -65,6 +65,7 @@ router.get('/current', requireAuth, async(req, res) => {
 // Edit a booking
 router.put('/:bookingId', requireAuth, async (req, res, next) => {
     const bookingId = req.params.bookingId
+    const spotId = req.params.spotId
     const userId = req.user.id
 
     const { startDate, endDate } = req.body
@@ -97,7 +98,7 @@ router.put('/:bookingId', requireAuth, async (req, res, next) => {
     if(bookingExists) {
         const err = new Error('A booking already exists for the specified date')
         err.status = 403
-        throw err
+        return next(err)
     }
 
     if (booking.startDate <= Date.now()) {
