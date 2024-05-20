@@ -138,7 +138,7 @@ router.get('/', validateQuery, async (req, res) => {
         )
         const rateAvg = total / reviews.length
         spot.dataValues.avgRating = rateAvg
-        spot.dataValues.previewImage = spotImages[0].url
+        spot.dataValues.previewImage = (spotImages && spotImages.length > 0) ? spotImages[0].url : null
     }
     return res.status(200).json({
         Spots: spots,
@@ -167,7 +167,7 @@ router.get('/current', requireAuth, async(req, res) => {
         const rateAvg = total / reviews.length
 
         spot.dataValues.avgRating = rateAvg
-        spot.dataValues.previewImage = spotImages ? spotImages[0].url : null
+        spot.dataValues.previewImage = (spotImages && spotImages.length > 0) ? spotImages[0].url : null;
     }
     res.status(200).json({ Spots: currSpots })
 })
