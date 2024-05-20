@@ -9,6 +9,35 @@ const { handleValidationErrors } = require('../../utils/validation');
 
 const router = express.Router()
 
+// Booking dates validations
+const validateBookings = [
+    check('startDate')
+        .exists({ checkFalsy: true })
+        .withMessage('startDate is required')
+        .custom((value) => {
+            const currDate = newDate()
+            if (newDate(value) < currDate) {
+                throw new Error('Start date cannot be in the past')
+            }
+            return true
+        }),
+    check('endDate')
+        .exists({ checkFalsy: true })
+        .withMessage('endDate is required')
+        .custom((value, { req }) => {
+            const start = req.body.startDate
+            const end = new Date(value)
+            if (start === value) {
+                throw new Error('Start and end dates cannot be the same')
+            }
+            if (end <= new Date(start)) {
+                throw new Error('End date cannot be before start date')
+            }
+            return true
+        }),
+        handleValidationErrors
+]
+
 // Current user bookings
 router.get('/current', requireAuth, async(req, res) => {
     const userId = req.user.id

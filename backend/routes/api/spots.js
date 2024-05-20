@@ -92,6 +92,36 @@ const validateReview = [
     handleValidationErrors
 ]
 
+// Booking dates validation
+const validateBookings = [
+    check('startDate')
+        .exists({ checkFalsy: true })
+        .withMessage('startDate is required')
+        .custom((value) => {
+            const currDate = newDate()
+            if (newDate(value) < currDate) {
+                throw new Error('Start date cannot be in the past')
+            }
+            return true
+        }),
+    check('endDate')
+        .exists({ checkFalsy: true })
+        .withMessage('endDate is required')
+        .custom((value, { req }) => {
+            const start = req.body.startDate
+            const end = new Date(value)
+            if (start === value) {
+                throw new Error('Start and end dates cannot be the same')
+            }
+            if (end <= new Date(start)) {
+                throw new Error('End date cannot be before start date')
+            }
+            return true
+        }),
+        handleValidationErrors
+]
+
+
 // Get all spots
 router.get('/', validateQuery, async (req, res) => {
     let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query
@@ -479,7 +509,7 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
 
 
 // Create booking from spotId
-router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
+router.post('/:spotId/bookings', requireAuth, validateBookings, async (req, res, next) => {
     const spotId = req.params.spotId
     const userId = req.user.id
     const { startDate, endDate } = req.body
@@ -500,19 +530,21 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
         return next(err)
     }
 
-    const bookingExists = await Booking.findOne({
+    const bookingExists = await Booking.findAll({
         where: {
-            spotId,
+            spotId: spotId,
             [Op.or]: [
-                {startDate: {[Op.between]: [startDate, endDate]}},
-                {endDate: {[Op.between]: [startDate, endDate]}}
+                { startDate: { [Op.between]: [startDate, endDate] }},
+                { endDate: { [Op.between]: [startDate, endDate] }}
             ]
         }
     })
 
-    if(bookingExists) {
+    if(bookingExists.length > 0) {
         const err = new Error('A booking already exists for the specified date')
         err.status = 403
+        err.title = 'Booking Date Error'
+        err.errors = { message: 'Spot is already booked on this date'}
         return next(err)
     }
 
