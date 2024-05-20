@@ -100,6 +100,7 @@ router.put('/:bookingId', requireAuth, async (req, res, next) => {
 
     const booking = await Booking.findByPk(bookingId)
 
+
     if(!booking) {
         const err = new Error('Resource not found')
         err.status = 404
@@ -115,10 +116,11 @@ router.put('/:bookingId', requireAuth, async (req, res, next) => {
     }
     const bookingExists = await Booking.findOne({
         where: {
-            spotId,
+            spotId: booking.spotId,
             [Op.or]: [
-                {startDate: {[Op.between]: [startDate, endDate]}},
-                {endDate: {[Op.between]: [startDate, endDate]}}
+                {startDate: { [Op.between]: [startDate, endDate] }},
+                {endDate: { [Op.between]: [startDate, endDate] }},
+                {[Op.and]: [{ startDate: { [Op.lte]: startDate }}, {endDate: { [Op.gte]: endDate } }] }
             ]
         }
     })
@@ -155,6 +157,7 @@ router.delete('/:bookingId', requireAuth, async (req, res, next) => {
         err.status = 404
         err.title = 'Resource not found'
         err.errors = { message: 'Booking could not be found'}
+        return next(err)
     }
 
     if(userId !== booking.userId) {
@@ -167,11 +170,11 @@ router.delete('/:bookingId', requireAuth, async (req, res, next) => {
 
 
     if (booking.startDate <= Date.now()) {
-        const err = new Error('Cannot delete past bookings');
-        err.status = 403;
-        err.errors = { message: 'Cannot delete past bookings' };
+        const err = new Error('Cannot delete past bookings')
+        err.status = 403
+        err.errors = { message: 'Cannot delete past bookings' }
         err.title = 'Forbidden'
-        return next(err);
+        return next(err)
     };
 
     await booking.destroy()

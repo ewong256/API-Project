@@ -98,8 +98,8 @@ const validateBookings = [
         .exists({ checkFalsy: true })
         .withMessage('startDate is required')
         .custom((value) => {
-            const currDate = new Date()
-            if (new Date(value) < currDate) {
+            const currDate = newDate()
+            if (newDate(value) < currDate) {
                 throw new Error('Start date cannot be in the past')
             }
             return true
@@ -534,8 +534,9 @@ router.post('/:spotId/bookings', requireAuth, validateBookings, async (req, res,
         where: {
             spotId: spotId,
             [Op.or]: [
-                { startDate: { [Op.between]: [startDate, endDate] }},
-                { endDate: { [Op.between]: [startDate, endDate] }}
+                {startDate: { [Op.between]: [startDate, endDate] }},
+                {endDate: { [Op.between]: [startDate, endDate] }},
+                {[Op.and]: [{ startDate: { [Op.lte]: startDate }}, {endDate: { [Op.gte]: endDate } }]}
             ]
         }
     })
