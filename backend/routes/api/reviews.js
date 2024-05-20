@@ -109,7 +109,7 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
         }
     })
 
-    if(reviewImages >= 10) {
+    if(reviewImages.length >= 10) {
         const err = new Error('Maximum number of images for this resource was reached')
         err.status = 403
         err.title = 'Image Overflow'

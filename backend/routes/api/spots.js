@@ -228,7 +228,7 @@ router.get('/:spotId', async (req, res, next) => {
         const err = new Error('Resource not found')
         err.status = 404
         err.title = 'Resource not found'
-        err.errors = { message: 'Resource not found' }
+        err.errors = { message: 'Spot could not be found' }
         return next(err)
     }
 
@@ -296,7 +296,7 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
         const err = new Error('Resource not found')
         err.status = 404
         err.title = 'Resource not found'
-        err.errors = { message: 'Resource not found' }
+        err.errors = { message: 'Spot could not be found' }
         return next(err)
     }
 
@@ -335,6 +335,7 @@ router.put('/:spotId', requireAuth, validateSpot, async(req, res, next) => {
         const err = new Error('Resource not found')
         err.status = 404
         err.title = 'Resource not found'
+        err.errors = { message: 'Spot could not be found'}
         return next(err)
     }
     if(userId !== spot.ownerId) {
@@ -369,6 +370,7 @@ router.delete('/:spotId', requireAuth, async(req, res, next) => {
         const err = new Error('Resource not found')
         err.status = 404
         err.title = 'Resource not found'
+        err.errors = { message: 'Spot could not be found' }
         return next(err)
     }
     if(userId !== spot.ownerId) {
@@ -393,7 +395,7 @@ router.get('/:spotId/reviews', async(req, res, next) => {
         const err = new Error('Resource not found')
         err.status = 404
         err.title = 'Resource not found'
-        err.errors = { message: `Resource not found`}
+        err.errors = { message: 'Spot could not be found' }
         return next(err)
     }
 
@@ -520,6 +522,8 @@ router.post('/:spotId/bookings', requireAuth, validateBookings, async (req, res,
     if(!spot) {
         const err = new Error('Spot not found')
         err.status = 404
+        err.title = 'Resource not found'
+        err.errors = { message: 'Spot could not be found' }
         return next(err)
     }
 
@@ -546,7 +550,7 @@ router.post('/:spotId/bookings', requireAuth, validateBookings, async (req, res,
         const err = new Error('A booking already exists for the specified date')
         err.status = 403
         err.title = 'Booking Date Error'
-        err.errors = { message: 'Spot is already booked on this date'}
+        err.errors = { message: 'Spot is already booked on this date' }
         return next(err)
     }
 
