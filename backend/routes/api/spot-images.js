@@ -23,8 +23,8 @@ router.delete('/:imageId', requireAuth, async(req, res, next) => {
         err.errors = { message: 'Image could not be found'}
         return next(err)
     }
-    if(userId !== spotImage.userId) {
-        const err = new Error('Must own the booking to edit')
+    if(userId !== spotImage.Spot.ownerId) {
+        const err = new Error('Must own the image to delete')
         err.status = 403
         err.title = 'Forbidden'
         err.errors= { message: 'Unauthorized for this action'}
