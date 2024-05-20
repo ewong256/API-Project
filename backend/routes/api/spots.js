@@ -98,8 +98,8 @@ const validateBookings = [
         .exists({ checkFalsy: true })
         .withMessage('startDate is required')
         .custom((value) => {
-            const currDate = newDate()
-            if (newDate(value) < currDate) {
+            const currDate = new Date()
+            if (new Date(value) < currDate) {
                 throw new Error('Start date cannot be in the past')
             }
             return true
