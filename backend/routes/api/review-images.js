@@ -10,7 +10,7 @@ const router = express.Router()
 
 // Delete a reviewImage
 router.delete("/:imageId", requireAuth, async (req, res, next) => {
-    const deleteImage = await SpotImage.findByPk(req.params.imageId);
+    const deleteImage = await ReviewImage.findByPk(req.params.imageId);
 
     if (!deleteImage) {
       err.status = 404
