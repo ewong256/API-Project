@@ -15,8 +15,8 @@ const validateBookings = [
         .exists({ checkFalsy: true })
         .withMessage('startDate is required')
         .custom((value) => {
-            const currDate = newDate()
-            if (newDate(value) < currDate) {
+            const currDate = new Date()
+            if (new Date(value) < currDate) {
                 throw new Error('Start date cannot be in the past')
             }
             return true
@@ -92,11 +92,11 @@ router.get('/current', requireAuth, async(req, res) => {
 })
 
 // Edit a booking
-router.put('/:bookingId', requireAuth, async (req, res, next) => {
+router.put('/:bookingId', requireAuth, validateBookings, async (req, res, next) => {
     const bookingId = req.params.bookingId
     const userId = req.user.id
 
-    const { startDate, endDate, spotId } = req.body
+    const { startDate, endDate } = req.body
 
     const booking = await Booking.findByPk(bookingId)
 
@@ -106,6 +106,7 @@ router.put('/:bookingId', requireAuth, async (req, res, next) => {
         err.status = 404
         err.title = 'Resource not found'
         err.errors = { message: 'Booking could not be found'}
+        return next(err)
     }
     if(userId !== booking.userId) {
         const err = new Error('Must own the booking to edit')
@@ -114,7 +115,16 @@ router.put('/:bookingId', requireAuth, async (req, res, next) => {
         err.errors= { message: 'Unauthorized for this action'}
         return next(err)
     }
-    const bookingExists = await Booking.findOne({
+
+    const currDate = new Date()
+    if(new Date(booking.endDate) < currDate) {
+        return res.status(400).json({
+            message: 'Cannot make changes to a booking in the past'
+        })
+    }
+
+
+    const bookingExists = await Booking.findAll({
         where: {
             spotId: booking.spotId,
             [Op.or]: [
@@ -131,13 +141,6 @@ router.put('/:bookingId', requireAuth, async (req, res, next) => {
         return next(err)
     }
 
-    if (booking.startDate <= Date.now()) {
-        const err = new Error('Cannot edit past bookings');
-        err.status = 403;
-        err.errors = { message: 'Cannot edit past bookings' };
-        err.title = 'Forbidden'
-        return next(err);
-    };
 
     booking.startDate = startDate
     booking.endDate = endDate
@@ -169,13 +172,12 @@ router.delete('/:bookingId', requireAuth, async (req, res, next) => {
     }
 
 
-    if (booking.startDate <= Date.now()) {
-        const err = new Error('Cannot delete past bookings')
-        err.status = 403
-        err.errors = { message: 'Cannot delete past bookings' }
-        err.title = 'Forbidden'
-        return next(err)
-    };
+     const currDate = new Date()
+    if(new Date(booking.endDate) < currDate) {
+        return res.status(400).json({
+            message: 'Cannot delete a booking in the past'
+        })
+    }
 
     await booking.destroy()
 

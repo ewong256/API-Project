@@ -199,7 +199,7 @@ router.get('/current', requireAuth, async(req, res) => {
         spot.dataValues.avgRating = rateAvg
         spot.dataValues.previewImage = (spotImages && spotImages.length > 0) ? spotImages[0].url : null;
     }
-    res.status(200).json({ Spots: currSpots })
+    return res.status(200).json({ Spots: currSpots })
 })
 
 // Get details of Spot from an id
@@ -313,7 +313,7 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
         preview
     })
 
-    res.status(200).json({
+    return res.status(200).json({
         id: newImage.id,
         url: newImage.url,
         preview: newImage.preview
