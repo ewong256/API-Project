@@ -126,6 +126,21 @@ const validateBookings = [
 router.get('/', validateQuery, async (req, res) => {
     let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query
 
+    if(!page) page = 1
+    if(!size) size = 20
+
+
+    const pagination = {}
+
+
+    page = parseInt(page)
+    size = parseInt(size)
+
+    if(Number.isInteger(page) && Number.isInteger(size) && page > 0 && size > 0 && size <= 20) {
+        pagination.limit = size
+        pagination.offset = size * (page - 1)
+    }
+
     let where = {}
 
     minLat = minLat ? minLat : -90
@@ -139,20 +154,6 @@ router.get('/', validateQuery, async (req, res) => {
     where.lng = { [ Op.between ] : [ minLng, maxLng ] }
     where.price = { [ Op.between ] : [ minPrice, maxPrice ] }
 
-
-    const pagination = {}
-
-    if(!page) page = 1
-
-    if(!size) size = 20
-
-    page = parseInt(page)
-    size = parseInt(size)
-
-    if(Number.isInteger(page) && Number.isInteger(size) && page > 0 && size > 0 && size <= 20) {
-        pagination.limit = size
-        pagination.offset = size * (page - 1)
-    }
 
     const spots = await Spot.findAll({
         where,
