@@ -124,8 +124,9 @@ router.put('/:bookingId', requireAuth, validateBookings, async (req, res, next) 
     }
 
 
-    const bookingExists = await Booking.findAll({
+    const bookingConflict = await Booking.findAll({
         where: {
+            id: { [Op.ne]: bookingId },
             spotId: booking.spotId,
             [Op.or]: [
                 {startDate: { [Op.between]: [startDate, endDate] }},
@@ -135,9 +136,10 @@ router.put('/:bookingId', requireAuth, validateBookings, async (req, res, next) 
         }
     })
 
-    if(bookingExists) {
+    if(bookingConflict) {
         const err = new Error('A booking already exists for the specified date')
-        err.status = 403
+        err.status = 400
+        err.errors = { message: 'Booking already exists for specified date'}
         return next(err)
     }
 
