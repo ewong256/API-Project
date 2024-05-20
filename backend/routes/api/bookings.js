@@ -139,7 +139,10 @@ router.put('/:bookingId', requireAuth, validateBookings, async (req, res, next) 
     if(bookingConflict.length >= 1) {
         const err = new Error('A booking already exists for the specified date')
         err.status = 403
-        err.errors = { message: 'Booking already exists for specified date'}
+        err.errors = {
+            startDate: 'Start date conflicts with an existing booking',
+            endDate: 'End date conflicts with an existing booking'
+          }
         return next(err)
     }
 
@@ -176,7 +179,7 @@ router.delete('/:bookingId', requireAuth, async (req, res, next) => {
 
      const currDate = new Date()
     if(new Date(booking.endDate) < currDate) {
-        return res.status(400).json({
+        return res.status(403).json({
             message: 'Cannot delete a booking in the past'
         })
     }
