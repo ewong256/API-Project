@@ -136,9 +136,9 @@ router.put('/:bookingId', requireAuth, validateBookings, async (req, res, next) 
         }
     })
 
-    if(bookingConflict) {
+    if(bookingConflict.length >= 1) {
         const err = new Error('A booking already exists for the specified date')
-        err.status = 400
+        err.status = 403
         err.errors = { message: 'Booking already exists for specified date'}
         return next(err)
     }
