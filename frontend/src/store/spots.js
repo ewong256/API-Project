@@ -67,6 +67,7 @@ export const createSpot = (spotData) => async(dispatch) => {
     }
 }
 
+
 export const updateSpot = (spotId, spotData) => async(dispatch) => {
     const response  = await csrfFetch(`/api/spots/${spotId}`,
         {
