@@ -36,9 +36,100 @@ const editSpot = (spot) => ({
 
 
 // thunks
-const fetchSpots = () => async (dispatch) => {
+export const fetchSpots = () => async (dispatch) => {
     const response = await fetch('/api/spots')
-    const spotData = response.json()
-    dispatch(getSpots(spotData))
+    const spotData = await response.json()
+    dispatch(getSpots(spotData.Spots))
     return response
+}
+
+export const getSpotId = (spotId) => async(dispatch) => {
+    const response = await fetch(`/api/spots/${spotId}`)
+    const spotData = await response.json()
+    dispatch(loadSpotId(spotData))
+    return response
+}
+
+export const createSpot = (spotData) => async(dispatch) => {
+    const response = await csrfFetch('/api/spots',
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(spotData)
+        }
+    )
+    if (response.ok) {
+        const newSpot = await response.json()
+        dispatch(addSpot(newSpot))
+        return newSpot
+    }
+}
+
+export const updateSpot = (spotId, spotData) => async(dispatch) => {
+    const response  = await csrfFetch(`/api/spots/${spotId}`,
+        {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(spotData)
+        }
+    )
+    if (response.ok) {
+        const updatedSpot = await response.json()
+        dispatch(editSpot(updatedSpot))
+        return updatedSpot
+    }
+}
+
+export const deleteSpot = (spotId) => async (dispatch) => {
+    const response = await csrfFetch(`/api/spots/${spotId}`, {
+        method: 'DELETE',
+    })
+    if (response.ok) {
+        const data = await response.json();
+        dispatch(removeSpot(spotId))
+        return data
+    } else {
+        return response
+    }
+}
+
+// reducers
+export default function spotsReducer(state = {}, action) {
+    switch(action.type) {
+        case GET_SPOTS: {
+            let newState = {}
+            action.spots.forEach(spot => newState[spot.id] = spot)
+            return newState
+        }
+        case LOAD_SPOT_ID: {
+            let newState = { ...state }
+            const spot = action.spot
+            newState[spot.id] = spot
+            return newState
+        }
+        case ADD_SPOT: {
+            let newState = { ...state }
+            const spot = action.spot
+            newState[spot.id] = spot
+            return newState
+        }
+        case EDIT_SPOT: {
+            let newState = { ...state }
+            const spot = action.spot
+            newState[spot.id] = spot
+            return newState
+        }
+        case REMOVE_SPOT: {
+            let newState = { ...state }
+            const spot = action.spot
+            delete newState[spot.spotId]
+            return newState
+        }
+        default:
+            return state
+    }
 }

@@ -6,6 +6,8 @@ import { Outlet, createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Navigation from './components/Navigation/Navigation-bonus';
 import * as sessionActions from './store/session';
 import { Modal } from './context/Modal';
+import Home from './components/Home/Home.jsx'
+import SpotDetails from './components/SpotDetails/SpotDetails.jsx';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -32,8 +34,12 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <h1>Welcome!</h1>
+        element: <Home />
       },
+      {
+        path: 'spots/:spotId',
+        element: <SpotDetails />
+      }
       // {
       //   path: 'login',
       //   element: <LoginFormPage />
