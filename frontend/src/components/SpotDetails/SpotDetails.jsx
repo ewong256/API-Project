@@ -21,7 +21,7 @@ function SpotDetails() {
     return(
         <>
         {isLoaded && spot && (
-            <h2>{thisSpot.name} PAIN PAIN PAIN</h2>
+            <h2>{thisSpot.name} PAIN PAIN PAIN WHYYYYYYYYYYYYYYYYYYYYYYY WORK PLEASE</h2>
         )}
 
         </>

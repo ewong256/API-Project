@@ -157,7 +157,7 @@ router.get('/', validateQuery, async (req, res) => {
     const spots = await Spot.findAll({
         where,
         ...pagination
-    });
+    })
 
     for(let spot of spots) {
         const reviews = await spot.getReviews()
@@ -175,7 +175,7 @@ router.get('/', validateQuery, async (req, res) => {
         page,
         size,
     })
-});
+})
 
 
 
@@ -277,7 +277,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
         description,
         price
     })
-    res.status(201).json(newSpot)
+    return res.status(201).json(newSpot)
 })
 
 
