@@ -9,6 +9,7 @@ import { Modal } from './context/Modal';
 import Home from './components/Home/Home.jsx'
 import SpotDetails from './components/SpotDetails/SpotDetails.jsx';
 import CreateSpot from './components/CreateSpot/CreateSpot.jsx';
+import ManageSpots from './components/ManageSpots/ManageSpots.jsx'
 
 function Layout() {
   const dispatch = useDispatch();
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
         path: '/spots/new',
         element: <CreateSpot />
       },
+      {
+        path: '/spots',
+        element: <ManageSpots />
+      }
       // {
       //   path: 'login',
       //   element: <LoginFormPage />
