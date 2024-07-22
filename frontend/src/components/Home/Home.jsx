@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchSpots } from '../../store/spots'
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { FaStar } from 'react-icons/fa6'
 import './Home.css'
 
 function Home() {
@@ -13,23 +14,29 @@ function Home() {
         dispatch(fetchSpots())
     }, [dispatch])
 
+    if(!spots) {
+        return <h2>Loading...</h2>
+    }
+
     return (
         <>
-            <h1>TEST TEST TEST</h1>
-            <div className='spotContainer'>
-                <h2>TEST</h2>
-                {spots.map((spot) => (
-                    <div className='spotName' key={spot.id}>
-                        <NavLink className='spotLink' to={`/spots/${spot.id}`}>
-                            <img src={spot.previewImage} className='spotThumbnail' alt='Spot Preview' />
-                            <span className='spotName'>{spot.name}</span>
-                            <div className='spotPrice'>
-                                {spot.price} / night
-                            </div>
-                        </NavLink>
+            <div className="home">
+            {spots.map((spot, index) =>
+                <Link
+                    to={`/spots/${spot.id}`}
+                    key={index}
+                    >
+                    <div className="spot-grid">
+                            <img src={spot.previewImage}/>
+                        <div className="spot-details">
+                            <p>{spot.city}, {spot.state}</p>
+                            <p>{spot.avgRating ? <><FaStar />{Number(spot.avgRating).toFixed(2)}</>: <><FaStar /> New</>}</p>
+                        </div>
+                        <p>{`$${spot.price} / Night`}</p>
                     </div>
-                ))}
-            </div>
+                </Link>
+            )}
+        </div>
         </>
     )
 }

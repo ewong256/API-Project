@@ -2,6 +2,46 @@
   position: absolute;
 }
 
+body {
+  font-family: 'Nunito', sans-serif;
+}
+
 .hidden {
   display: none;
+}
+
+#navBar-left {
+  display: flex;
+  align-items: center;
+}
+
+#navBar-left img {
+  max-width: 90px;
+  height: auto;
+  margin-right: 10px;
+}
+
+#website-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: 50px;
+  font-weight: bold;
+  color: #ff5a5f;
+  margin-top: -5px;
+  margin-left: 10px;
+}
+
+#spot-create {
+  margin-left: 20px;
+}
+
+#spot-create a {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background-color: #ff5a5f;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }

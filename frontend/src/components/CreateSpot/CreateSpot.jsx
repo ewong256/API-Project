@@ -4,7 +4,6 @@ import { createSpot, getSpotId } from '../../store/spots'
 import { useNavigate } from 'react-router-dom'
 import './CreateSpot.css'
 
-
 function CreateSpot() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -15,51 +14,50 @@ function CreateSpot() {
     const [city, setCity] = useState('')
     const [country, setCountry] = useState('')
     const [state, setState] = useState('')
-    const [lat, setLat] = useState(90)
-    const [lng, setLng] = useState(180)
-    const [price, setPrice] = useState(1)
-    const [previewImage, setPreviewImage] = useState({url: "", preview: true})
-
-
+    const [lat, setLat] = useState('')
+    const [lng, setLng] = useState('')
+    const [price, setPrice] = useState('')
+    const [previewImage, setPreviewImage] = useState('')
+    const [imageUrls, setImageUrls] = useState([''])
     const [errors, setErrors] = useState([])
 
     useEffect(() => {
         const errorsArray = []
 
-        if(name.length < 1) {
-            errorsArray.push('Name must be at least 1 character(s) long')
+        if (!name) {
+            errorsArray.push('Name is required')
         }
 
-        if(city.length < 5) {
+        if (description.length < 30) {
+            errorsArray.push('Description needs 30 or more characters')
+        }
+
+        if (!address) {
+            errorsArray.push('Address is required')
+        }
+
+        if (city.length < 5) {
             errorsArray.push('City must be at least 5 characters')
         }
 
-        if(address.length < 5) {
-            errorsArray.push('Address must be at least 5 characters')
-        }
-
-        if(lat < -90 || lat > 90) {
-            errorsArray.push('Lat must be between -90 and 90')
-        }
-
-        if(lng < -180 || lng > 180) {
-            errorsArray.push('Lng must be between -180 and 180')
-        }
-
-        if(!price) {
-            errorsArray.push('Price is required')
-        }
-
-        if(!country) {
+        if (!country) {
             errorsArray.push('Country is required')
         }
 
-        if(!state) {
+        if (!state) {
             errorsArray.push('State is required')
         }
 
-        if(!description) {
-            errorsArray.push('Description is required')
+        if (!price) {
+            errorsArray.push('Price per night is required')
+        }
+
+        if (!previewImage) {
+            errorsArray.push('Preview Image URL is required')
+        }
+
+        if (imageUrls.length < 1 || !imageUrls[0]) {
+            errorsArray.push('At least one image URL is required')
         }
 
         setErrors(errorsArray)
@@ -67,17 +65,18 @@ function CreateSpot() {
         name,
         description,
         address,
-        country,
         city,
+        country,
         state,
-        lat,
-        lng,
         price,
-        previewImage.url
+        previewImage,
+        imageUrls
     ])
 
     async function onSubmit(e) {
         e.preventDefault()
+
+        if (errors.length > 0) return;
 
         const spot = {
             name,
@@ -89,74 +88,91 @@ function CreateSpot() {
             lat,
             lng,
             price,
-            url: previewImage.url,
-            preview: previewImage.preview
+            url: previewImage,
+            images: imageUrls
         }
-
 
         const newSpot = await dispatch(createSpot(spot))
         await dispatch(getSpotId(newSpot.id))
         navigate(`/spots/${newSpot.id}`)
     }
 
+    function handleImageUrlChange(index, value) {
+        const newImageUrls = [...imageUrls]
+        newImageUrls[index] = value
+        setImageUrls(newImageUrls)
+    }
 
     return (
         <div className="create-spot-form-container">
             <h2>Create a New Spot</h2>
             <form onSubmit={onSubmit}>
-                <label>
-                    Name:
-                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-                </label>
-                <label>
-                    Description:
-                    <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
-                </label>
-                <label>
-                    Address:
-                    <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
-                </label>
-                {errors.filter((error) => error.includes('Address'))}
-                <label>
-                    City:
-                    <input type="text" value={city} onChange={(e) => setCity(e.target.value)} />
-                </label>
-                {errors.filter((error) => error.includes('City'))}
-                <label>
-                    Country:
-                    <input type="text" value={country} onChange={(e) => setCountry(e.target.value)} />
-                </label>
-                {errors.filter((error) => error.includes('Country'))}
-                <label>
-                    State:
-                    <input type="text" value={state} onChange={(e) => setState(e.target.value)} />
-                </label>
-                {errors.filter((error) => error.includes('State'))}
-                <label>
-                    Latitude:
-                    <input type="number" value={lat} onChange={(e) => setLat(e.target.value)} />
-                </label>
-                {errors.filter((error) => error.includes('Lat'))}
-                <label>
-                    Longitude:
-                    <input type="number" value={lng} onChange={(e) => setLng(e.target.value)} />
-                </label>
-                {errors.filter((error) => error.includes('Lng'))}
-                <label>
-                    Price:
-                    <input type="number" value={price} onChange={(e) => setPrice(Number(e.target.value))} />
-                </label>
-                {errors.filter((error) => error.includes('Price'))}
-                <label>
-                    Preview Image URL:
-                    <input type="text" value={previewImage.url} onChange={(e) => setPreviewImage({ ...previewImage, url: e.target.value })} />
-                </label>
+                {errors.length > 0 && (
+                    <div className="form-errors">
+                        {errors.map((error, idx) => <p key={idx} className="error">{error}</p>)}
+                    </div>
+                )}
+                <section>
+                    <h3>Where&apos;s your place located?</h3>
+                    <p>Guests will only get your exact address once they booked a reservation.</p>
+                    <label>
+                        Country:
+                        <input type="text" value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Country" />
+                    </label>
+                    <label>
+                        Street Address:
+                        <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Street Address" />
+                    </label>
+                    <label>
+                        City:
+                        <input type="text" value={city} onChange={(e) => setCity(e.target.value)} placeholder="City" />
+                    </label>
+                    <label>
+                        State:
+                        <input type="text" value={state} onChange={(e) => setState(e.target.value)} placeholder="State" />
+                    </label>
+                    <label>
+                        Latitude:
+                        <input type="number" value={lat} onChange={(e) => setLat(e.target.value)} placeholder="Latitude" />
+                    </label>
+                    <label>
+                        Longitude:
+                        <input type="number" value={lng} onChange={(e) => setLng(e.target.value)} placeholder="Longitude" />
+                    </label>
+                </section>
+                <section>
+                    <h3>Describe your place to guests</h3>
+                    <p>Mention the best features of your space, any special amenities like fast wifi or parking, and what you love about the neighborhood.</p>
+                    <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Please write at least 30 characters" />
+                </section>
+                <section>
+                    <h3>Create a title for your spot</h3>
+                    <p>Catch guests&apos; attention with a spot title that highlights what makes your place special.</p>
+                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name of your spot" />
+                </section>
+                <section>
+                    <h3>Set a base price for your spot</h3>
+                    <p>Competitive pricing can help your listing stand out and rank higher in search results.</p>
+                    <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="Price per night (USD)" />
+                </section>
+                <section>
+                    <h3>Liven up your spot with photos</h3>
+                    <p>Submit a link to at least one photo to publish your spot.</p>
+                    <label>
+                        Preview Image URL:
+                        <input type="text" value={previewImage} onChange={(e) => setPreviewImage(e.target.value)} placeholder="Preview Image URL" />
+                    </label>
+                    {imageUrls.map((url, index) => (
+                        <label key={index}>
+                            Image URL {index + 1}:
+                            <input type="text" value={url} onChange={(e) => handleImageUrlChange(index, e.target.value)} placeholder={index === 0 ? "Preview Image URL" : "Image URL"} />
+                        </label>
+                    ))}
+                </section>
                 <button type="submit" disabled={errors.length > 0}>Create Spot</button>
             </form>
         </div>
-    );
-
+    )
 }
-
 
 export default CreateSpot

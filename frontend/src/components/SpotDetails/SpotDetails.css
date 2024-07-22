@@ -1,0 +1,142 @@
+#spot-details {
+    width: 80%;
+    margin: 0 auto;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+}
+
+#spot-details h2, #spot-details h3 {
+    margin: 5px 0;
+}
+
+#spot-image-gallery {
+    display: flex;
+    flex-direction: row;
+    margin: 10px 0;
+}
+
+#preview-image {
+    flex: 3;
+    margin-right: 5px;
+}
+
+#preview-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+#small-images {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#small-images figure {
+    flex: 1;
+}
+
+#small-images img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+#spot-description-box {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+#spot-description {
+    flex: 3;
+    margin-right: 10px;
+}
+
+#spot-callout-box {
+    flex: 1;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#spot-callout-box #text {
+    margin-bottom: 10px;
+}
+
+#spot-callout-box #price {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#spot-callout-box #review {
+    font-size: 16px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#spot-callout-box #star {
+    color: #f39c12;
+    margin-right: 5px;
+}
+
+#spot-callout-box button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#spot-callout-box button:hover {
+    background-color: #0056b3;
+}
+
+#spot-reviews {
+    margin: 10px 0;
+}
+
+#spot-reviews h3 {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#spot-reviews h3 #star {
+    margin-right: 5px;
+}
+
+#review-box {
+    border-bottom: 1px solid #ddd;
+    padding: 8px 0;
+}
+
+#review-box h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+#review-box p {
+    margin: 3px 0;
+}
+
+#review-box button {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+#review-box button:hover {
+    background-color: #ff3b3b;
+}

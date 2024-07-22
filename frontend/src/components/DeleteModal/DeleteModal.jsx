@@ -12,12 +12,12 @@ function DeleteModal({ spotId }) {
     }
 
     return (
-        <div className="deleteModalContainer">
-            <h2>DELETE</h2>
+        <div className="delete-modal-container">
+            <h1>DELETE</h1>
             <div className="confirmation">
                 <p>Are you sure you want to delete this spot?</p>
             </div>
-            <div className="confirmation buttons">
+            <div className="confirmation-buttons">
                 <button onClick={spotDelete}> Yes </button>
                 <button onClick={closeModal}> No </button>
             </div>

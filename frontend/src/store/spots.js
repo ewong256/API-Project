@@ -18,9 +18,9 @@ const addSpot = (spot) => ({
     spot
 })
 
-const removeSpot = (spot) => ({
+const removeSpot = (spotId) => ({
     type: REMOVE_SPOT,
-    spot
+    spotId
 })
 
 
@@ -105,9 +105,8 @@ export const deleteSpot = (spotId) => async (dispatch) => {
         method: 'DELETE',
     })
     if (response.ok) {
-        const data = await response.json();
         dispatch(removeSpot(spotId))
-        return data
+        return await response.json()
     } else {
         return response
     }
@@ -134,16 +133,15 @@ export default function spotsReducer(state = {}, action) {
             return newState
         }
         case EDIT_SPOT: {
-            let newState = { ...state }
-            const spot = action.spot
-            newState[spot.id] = spot
-            return newState
+            return {
+                ...state,
+                [action.spot.id]: action.spot
+            }
         }
         case REMOVE_SPOT: {
-            let newState = { ...state }
-            const spot = action.spot
-            delete newState[spot.spotId]
-            return newState
+        const newState = { ...state }
+        delete newState[action.spotId]
+        return newState
         }
         default:
             return state
