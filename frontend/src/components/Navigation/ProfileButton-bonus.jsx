@@ -1,9 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom'
+import { CgProfile } from 'react-icons/cg'
 import * as sessionActions from '../../store/session';
 import OpenModalMenuItem from './OpenModalMenuItem';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
+import './ProfileButton.css'
+
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -40,19 +44,20 @@ function ProfileButton({ user }) {
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
   return (
-    <>
-      <button onClick={toggleMenu}>
-        <i className="fas fa-user-circle" />
-      </button>
+    <div className="profile-button-container">
+      <CgProfile
+        onClick={toggleMenu}
+        className="dropdown-icon"
+      />
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
           <>
-            <li>{user.username}</li>
-            <li>{user.firstName} {user.lastName}</li>
+            <li>Hello, {user.firstName}</li>
             <li>{user.email}</li>
-            <li>
+            <div className="buttons">
+              <Link to='/spots'><button onClick={closeMenu}>Manage Spots</button></Link>
               <button onClick={logout}>Log Out</button>
-            </li>
+            </div>
           </>
         ) : (
           <>
@@ -69,8 +74,8 @@ function ProfileButton({ user }) {
           </>
         )}
       </ul>
-    </>
-  );
+    </div>
+  )
 }
 
 export default ProfileButton;

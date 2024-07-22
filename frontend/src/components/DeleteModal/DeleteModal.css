@@ -1,0 +1,39 @@
+.delete-modal-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.delete-modal-container h1 {
+    margin-bottom: 20px;
+}
+
+.delete-modal-container p {
+    margin-bottom: 20px;
+}
+
+.delete-modal-container button {
+    height: 50px;
+    width: 350px;
+    margin: 5px 0;
+    background-color: #ff5a5f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.delete-modal-container button:hover {
+    background-color: #e04e4e;
+}
+
+.delete-modal-container button:last-of-type {
+    background-color: #ccc;
+}
+
+.delete-modal-container button:last-of-type:hover {
+    background-color: #b3b3b3;
+}

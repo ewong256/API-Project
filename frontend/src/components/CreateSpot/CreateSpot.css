@@ -1,0 +1,95 @@
+.create-spot-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+    box-sizing: border-box; /* Ensure padding is included in the total width */
+}
+
+.create-spot-form-container h2 {
+    color: #ff5a5f;
+    margin-bottom: 20px;
+}
+
+.create-spot-form-container h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.create-spot-form-container p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.create-spot-form-container form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding-right: 20px; /* Added right padding */
+    box-sizing: border-box; /* Ensure padding is included in the total width */
+}
+
+.create-spot-form-container label {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.create-spot-form-container input,
+.create-spot-form-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box; /* Ensure padding is included in the total width */
+}
+
+.create-spot-form-container textarea {
+    height: 150px;
+    resize: vertical; /* Allow vertical resize only, prevent horizontal resize */
+}
+
+.create-spot-form-container input:focus,
+.create-spot-form-container textarea:focus {
+    border-color: #ff5a5f;
+    outline: none;
+}
+
+.create-spot-form-container button {
+    background-color: #ff5a5f;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.create-spot-form-container button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.create-spot-form-container button:hover:not(:disabled) {
+    background-color: #e04c50;
+}
+
+.form-errors {
+    background-color: #fdd;
+    color: #a00;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.form-errors .error {
+    margin: 0;
+}
