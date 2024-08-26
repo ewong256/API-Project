@@ -18,10 +18,13 @@ function CreateSpot() {
     const [lng, setLng] = useState('')
     const [price, setPrice] = useState('')
     const [previewImage, setPreviewImage] = useState('')
-    const [imageUrls, setImageUrls] = useState([''])
+    const [imageUrls, setImageUrls] = useState(['', '', '', '', '']) // Initialize with 5 empty strings
     const [errors, setErrors] = useState([])
+    const [submitted, setSubmitted] = useState(false)
 
     useEffect(() => {
+        if (!submitted) return
+
         const errorsArray = []
 
         if (!name) {
@@ -56,10 +59,6 @@ function CreateSpot() {
             errorsArray.push('Preview Image URL is required')
         }
 
-        if (imageUrls.length < 1 || !imageUrls[0]) {
-            errorsArray.push('At least one image URL is required')
-        }
-
         setErrors(errorsArray)
     }, [
         name,
@@ -70,13 +69,51 @@ function CreateSpot() {
         state,
         price,
         previewImage,
-        imageUrls
+        imageUrls,
+        submitted,
     ])
 
     async function onSubmit(e) {
         e.preventDefault()
+        setSubmitted(true)
 
-        if (errors.length > 0) return;
+        const errorsArray = []
+
+        if (!name) {
+            errorsArray.push('Name is required')
+        }
+
+        if (description.length < 30) {
+            errorsArray.push('Description needs 30 or more characters')
+        }
+
+        if (!address) {
+            errorsArray.push('Address is required')
+        }
+
+        if (city.length < 5) {
+            errorsArray.push('City must be at least 5 characters')
+        }
+
+        if (!country) {
+            errorsArray.push('Country is required')
+        }
+
+        if (!state) {
+            errorsArray.push('State is required')
+        }
+
+        if (!price) {
+            errorsArray.push('Price per night is required')
+        }
+
+        if (!previewImage) {
+            errorsArray.push('Preview Image URL is required')
+        }
+
+        setErrors(errorsArray)
+
+        if (errorsArray.length > 0) return
 
         const spot = {
             name,
@@ -93,10 +130,8 @@ function CreateSpot() {
         const newSpot = await dispatch(createSpot(spot))
 
         if (newSpot) {
-
             await dispatch(addImageToSpot(newSpot.id, previewImage, true))
 
-           
             for (let url of imageUrls) {
                 if (url) {
                     await dispatch(addImageToSpot(newSpot.id, url, false))
@@ -118,7 +153,7 @@ function CreateSpot() {
         <div className="create-spot-form-container">
             <h2>Create a New Spot</h2>
             <form onSubmit={onSubmit}>
-                {errors.length > 0 && (
+                {submitted && errors.length > 0 && (
                     <div className="form-errors">
                         {errors.map((error, idx) => <p key={idx} className="error">{error}</p>)}
                     </div>
@@ -176,11 +211,16 @@ function CreateSpot() {
                     {imageUrls.map((url, index) => (
                         <label key={index}>
                             Image URL {index + 1}:
-                            <input type="text" value={url} onChange={(e) => handleImageUrlChange(index, e.target.value)} placeholder={index === 0 ? "Preview Image URL" : "Image URL"} />
+                            <input
+                                type="text"
+                                value={url}
+                                onChange={(e) => handleImageUrlChange(index, e.target.value)}
+                                placeholder={index === 0 ? "Preview Image URL" : "Image URL"}
+                            />
                         </label>
                     ))}
                 </section>
-                <button type="submit" disabled={errors.length > 0}>Create Spot</button>
+                <button type="submit">Create Spot</button>
             </form>
         </div>
     )

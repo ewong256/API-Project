@@ -50,3 +50,10 @@ p {
     font-size: 15px;
     margin: 0;
 }
+
+button:disabled {
+    background-color: #d6d6d6;
+    color: #a0a0a0;
+    cursor: not-allowed;
+    border: 1px solid #c0c0c0;
+}

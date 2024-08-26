@@ -25,6 +25,7 @@ function Home() {
                 <Link
                     to={`/spots/${spot.id}`}
                     key={index}
+                    title={spot.name}
                     >
                     <div className="spot-grid">
                             <img src={spot.previewImage}/>
