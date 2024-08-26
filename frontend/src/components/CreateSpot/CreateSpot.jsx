@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { createSpot, getSpotId } from '../../store/spots'
+import { createSpot, getSpotId, addImageToSpot } from '../../store/spots'
 import { useNavigate } from 'react-router-dom'
 import './CreateSpot.css'
 
@@ -88,13 +88,24 @@ function CreateSpot() {
             lat,
             lng,
             price,
-            url: previewImage,
-            images: imageUrls
         }
 
         const newSpot = await dispatch(createSpot(spot))
-        await dispatch(getSpotId(newSpot.id))
-        navigate(`/spots/${newSpot.id}`)
+
+        if (newSpot) {
+
+            await dispatch(addImageToSpot(newSpot.id, previewImage, true))
+
+           
+            for (let url of imageUrls) {
+                if (url) {
+                    await dispatch(addImageToSpot(newSpot.id, url, false))
+                }
+            }
+
+            await dispatch(getSpotId(newSpot.id))
+            navigate(`/spots/${newSpot.id}`)
+        }
     }
 
     function handleImageUrlChange(index, value) {
