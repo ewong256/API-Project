@@ -15,7 +15,7 @@ function ManageSpots() {
     let spots = useSelector((state) => state.spots)
     spots = Object.values(spots)
 
-    const userId = useSelector((state) => state.session.user.id)
+    const userId = useSelector((state) => state.session.user?.id)
 
     useEffect(() => {
         dispatch(fetchSpots())

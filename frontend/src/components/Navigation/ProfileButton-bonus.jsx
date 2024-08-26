@@ -1,16 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom'
-import { CgProfile } from 'react-icons/cg'
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { CgProfile } from 'react-icons/cg';
 import * as sessionActions from '../../store/session';
 import OpenModalMenuItem from './OpenModalMenuItem';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
-import './ProfileButton.css'
-
+import './ProfileButton.css';
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // Initialize navigate function
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
 
@@ -39,6 +39,7 @@ function ProfileButton({ user }) {
     e.preventDefault();
     dispatch(sessionActions.logout());
     closeMenu();
+    navigate('/'); // Redirect to home after logout
   };
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
@@ -52,8 +53,8 @@ function ProfileButton({ user }) {
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
           <>
-            <li>Hello, {user.firstName}</li>
-            <li>{user.email}</li>
+            <li>Hello, {user.firstName || 'Guest'}</li>
+            <li>{user.email || 'No email provided'}</li>
             <div className="buttons">
               <Link to='/spots'><button onClick={closeMenu}>Manage Spots</button></Link>
               <button onClick={logout}>Log Out</button>
@@ -75,7 +76,7 @@ function ProfileButton({ user }) {
         )}
       </ul>
     </div>
-  )
+  );
 }
 
 export default ProfileButton;
