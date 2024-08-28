@@ -105,7 +105,7 @@ function CreateSpot() {
             errorsArray.push('Description needs 30 or more characters')
         }
 
-        if (description.length > 1500) {
+        if (description.length > 255) {
             errorsArray.push('Description exceeds character limit')
         }
 
