@@ -1,7 +1,7 @@
 .profile-button-container {
     position: absolute;
     top: 30px;
-    right: 120px;
+    right: 20px;
     padding: 10px;
     z-index: 1000;
 }
@@ -50,7 +50,8 @@
 .profile-button-container .profile-dropdown {
     list-style-type: none;
     padding: 10px 10px;
-    margin: 0;
+    margin-top: 15px;
+    left: -130px;
     background-color: rgb(255, 255, 255);
     border-radius: 8px;
     border: 1px solid #ff5a5f
