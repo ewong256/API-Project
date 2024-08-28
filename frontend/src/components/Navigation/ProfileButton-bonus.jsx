@@ -56,7 +56,19 @@ function ProfileButton({ user }) {
             <li>Hello, {user.firstName || 'Guest'}</li>
             <li>{user.email || 'No email provided'}</li>
             <div className="buttons">
-              <Link to='/spots'><button onClick={closeMenu}>Manage Spots</button></Link>
+              <Link to='/spots'><button style={{
+                marginTop: '10px',
+                backgroundColor: '#ff5a5f',
+                color: '#fff',
+                border: 'none',
+                padding: '10px 20px',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'background-color 0.3s ease',
+                width: '100%'
+              }} onClick={closeMenu}>Manage Spots</button></Link>
               <button onClick={logout}
               style={{
                 marginTop: '10px',
