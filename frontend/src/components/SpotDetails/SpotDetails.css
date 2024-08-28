@@ -1,142 +1,192 @@
+
 #spot-details {
-    width: 80%;
+    max-width: 1000px;
     margin: 0 auto;
-    padding: 10px;
+    padding: 20px;
     font-family: Arial, sans-serif;
 }
 
-#spot-details h2, #spot-details h3 {
-    margin: 5px 0;
+
+#spot-details h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
 }
 
+#spot-details h3 {
+    font-size: 20px;
+    color: #000000;
+    margin-bottom: 30px;
+}
+
+
 #spot-image-gallery {
-    display: flex;
-    flex-direction: row;
-    margin: 10px 0;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-gap: 5px;
+    margin-bottom: 40px;
+    align-items: stretch;
 }
 
 #preview-image {
-    flex: 3;
-    margin-right: 5px;
+    grid-column: 1 / 2;
+    height: 100%;
+    margin-left: -15px;
+    display: flex;
+    align-items: center;
 }
 
 #preview-image img {
     width: 100%;
-    height: auto;
-    border-radius: 10px;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
 }
 
 #small-images {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+    display: grid;
+    margin-top: 15px;
+    margin-bottom: -15px;
+    margin-left: -40px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 5px;
 }
 
 #small-images figure {
-    flex: 1;
+    margin: 0;
+    height: 100%;
 }
 
 #small-images img {
     width: 100%;
-    height: auto;
-    border-radius: 10px;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
 }
+
 
 #spot-description-box {
     display: flex;
     justify-content: space-between;
-    margin: 10px 0;
+    align-items: flex-start;
+    margin-bottom: 30px;
 }
 
 #spot-description {
-    flex: 3;
-    margin-right: 10px;
+    flex: 2;
+    margin-right: 20px;
 }
 
-#spot-callout-box {
-    flex: 1;
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 10px;
-    text-align: center;
-}
-
-#spot-callout-box #text {
+#spot-description h3 {
+    font-size: 22px;
     margin-bottom: 10px;
 }
 
+#spot-description p {
+    line-height: 1.6;
+}
+
+
+#spot-callout-box {
+    flex: 1;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+}
+
 #spot-callout-box #price {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bold;
+    margin-bottom: 10px;
 }
 
 #spot-callout-box #review {
-    font-size: 16px;
-    color: #666;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 16px;
+    color: #666;
 }
 
-#spot-callout-box #star {
-    color: #f39c12;
+#spot-callout-box #review #star {
+    color: #ffb400;
     margin-right: 5px;
 }
 
-#spot-callout-box button {
-    background-color: #007bff;
-    color: white;
+#spot-callout-box #review .LuDot {
+    margin: 0 10px;
+}
+
+#spot-callout-box #button {
+    margin-top: 20px;
+}
+
+#spot-callout-box #button button {
+    width: 100%;
+    padding: 10px 0;
+    background-color: #ff5a5f;
+    color: #fff;
     border: none;
-    padding: 8px 16px;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 16px;
 }
 
-#spot-callout-box button:hover {
-    background-color: #0056b3;
+#spot-callout-box #button button:hover {
+    background-color: #ff8085;
 }
+
 
 #spot-reviews {
-    margin: 10px 0;
+    border-top: 1px solid #ccc;
+    padding-top: 30px;
 }
 
 #spot-reviews h3 {
     display: flex;
     align-items: center;
-    font-size: 18px;
-    margin-bottom: 10px;
+    font-size: 20px;
+    margin-bottom: 20px;
 }
 
 #spot-reviews h3 #star {
-    margin-right: 5px;
+    color: #ffb400;
+    margin-right: 10px;
 }
 
+#spot-reviews h3 .LuDot {
+    margin: 0px 10px;
+}
+
+
 #review-box {
-    border-bottom: 1px solid #ddd;
-    padding: 8px 0;
+    margin-bottom: 20px;
 }
 
 #review-box h3 {
-    margin: 0;
-    font-size: 16px;
+    font-size: 18px;
+    margin-bottom: 5px;
 }
 
 #review-box p {
-    margin: 3px 0;
+    margin-bottom: 10px;
 }
 
-#review-box button {
-    background-color: #ff6b6b;
+#review-box p:last-child {
+    margin-bottom: 0;
+}
+
+
+.open-modal-button {
+    background-color: #ff5a5f;
     color: white;
+    padding: 8px 15px;
     border: none;
-    padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 12px;
 }
 
-#review-box button:hover {
-    background-color: #ff3b3b;
+.open-modal-button:hover {
+    background-color: #ff8085;
 }

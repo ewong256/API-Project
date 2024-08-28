@@ -30,7 +30,8 @@ input[type="text"], input[type="password"] {
     box-sizing: border-box;
 }
 
-button {
+.signup-form button {
+    width: 100%;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -40,6 +41,7 @@ button {
     cursor: pointer;
     transition: background-color 0.3s;
 }
+
 
 button:hover {
     background-color: #0056b3;

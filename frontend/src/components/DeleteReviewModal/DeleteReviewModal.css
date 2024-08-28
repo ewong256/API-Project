@@ -1,0 +1,52 @@
+.delete-review-modal-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+}
+
+.delete-review-modal-container h1 {
+    margin-bottom: 20px;
+}
+
+.delete-review-modal-container p {
+    margin-bottom: 20px;
+}
+
+.delete-review-modal-container .confirmation-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.delete-review-modal-container button {
+    height: 50px;
+    width: 100%;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.delete-review-modal-container button:first-of-type {
+    background-color: #ff5a5f;
+}
+
+.delete-review-modal-container button:first-of-type:hover {
+    background-color: #e04e4e;
+}
+
+.delete-review-modal-container button:last-of-type {
+    background-color: #585858;
+    color: #fff;
+}
+
+.delete-review-modal-container button:last-of-type:hover {
+    background-color: #b3b3b3; 
+}

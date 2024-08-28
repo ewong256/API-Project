@@ -8,34 +8,34 @@ import { fetchSpots } from '../../store/spots';
 import { useEffect, useRef, useState } from 'react';
 
 function ManageSpots() {
-    const dispatch = useDispatch();
-    const [showModal, setShowModal] = useState(false);
-    const click = useRef();
+    const dispatch = useDispatch()
+    const [showModal, setShowModal] = useState(false)
+    const click = useRef()
 
-    let spots = useSelector((state) => state.spots);
-    spots = Object.values(spots);
+    let spots = useSelector((state) => state.spots)
+    spots = Object.values(spots)
 
-    const userId = useSelector((state) => state.session.user?.id);
-
-    useEffect(() => {
-        dispatch(fetchSpots());
-    }, [dispatch]);
+    const userId = useSelector((state) => state.session.user?.id)
 
     useEffect(() => {
-        if (!showModal) return;
+        dispatch(fetchSpots())
+    }, [dispatch])
+
+    useEffect(() => {
+        if (!showModal) return
 
         const closeModal = (e) => {
             if (!click.current.contains(e.target)) {
-                setShowModal(false);
+                setShowModal(false)
             }
         };
-        document.addEventListener('click', closeModal);
-        return () => document.removeEventListener('click', closeModal);
-    }, [showModal]);
+        document.addEventListener('click', closeModal)
+        return () => document.removeEventListener('click', closeModal)
+    }, [showModal])
 
-    const closeModal = () => setShowModal(false);
+    const closeModal = () => setShowModal(false)
 
-    const ownedSpots = spots.filter((spot) => spot.ownerId === userId);
+    const ownedSpots = spots.filter((spot) => spot.ownerId === userId)
 
     if (ownedSpots.length === 0) {
         return (
@@ -52,19 +52,21 @@ function ManageSpots() {
         <>
             <h1>Manage Your Spots</h1>
             <div className='yourSpots'>
-                <div className='spotsContainer'>
-                    {ownedSpots.map((spot) => (
-                        <div className='spotName' key={spot.id}>
-                            <NavLink className='spotLink' to={`/spots/${spot.id}`}>
-                                <img src={spot.previewImage} className='spotThumbnail' alt='Spot Preview' />
-                                <p className='spotName'>{spot.name}</p>
-                                <div className="details">
-                                    <p>{spot.city}, {spot.state}</p>
-                                    <p>{spot.avgRating ? <><FaStar />{parseFloat(spot.avgRating).toFixed(1)}</> : <><FaStar /> New</>}</p>
-                                </div>
-                                <div className='spotPrice'>$ {spot.price} / night</div>
-                            </NavLink>
-                            <Link to={`/spots/${spot.id}/edit`}><button>Update</button></Link>
+                {ownedSpots.map((spot) => (
+                    <div className='spotName' key={spot.id}>
+                        <NavLink className='spotLink' to={`/spots/${spot.id}`}>
+                            <img src={spot.previewImage} className='spotThumbnail' alt='Spot Preview' />
+                            <p className='spotTitle'>{spot.name}</p>
+                            <div className='details'>
+                                <p>{spot.city}, {spot.state}</p>
+                                <p>{spot.avgRating ? <><FaStar />{parseFloat(spot.avgRating).toFixed(1)}</> : <><FaStar /> New</>}</p>
+                            </div>
+                            <div className='spotPrice'>$ {spot.price} / night</div>
+                        </NavLink>
+                        <div className='buttons-container'>
+                            <Link to={`/spots/${spot.id}/edit`}>
+                                <button className='update-button'>Update</button>
+                            </Link>
                             <OpenModalButton
                                 buttonText='Delete'
                                 className='delete-spot-button'
@@ -72,11 +74,11 @@ function ManageSpots() {
                                 modalComponent={<DeleteModal spotId={spot.id} />}
                             />
                         </div>
-                    ))}
-                </div>
+                    </div>
+                ))}
             </div>
         </>
-    );
+    )
 }
 
-export default ManageSpots
+export default ManageSpots;

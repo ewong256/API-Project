@@ -66,6 +66,9 @@ function SpotDetails() {
         return <div>Loading...</div>
     }
 
+    // Sort reviews by date in descending order
+    const sortedReviews = thisReviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+
     return (
         <div id="spot-details">
             <h2>{spot.name}</h2>
@@ -97,7 +100,10 @@ function SpotDetails() {
                 <div id="spot-callout-box">
                     <div id="text">
                         <p id="price">${spot.price}</p>
-                        <p id="review">{Number(avgStars) ? <><FaStar id="star" /> {avgStars} </> : <><FaStar id="star" />{"New"}</>} {numReviews !== 0 ? <><LuDot /> {(numReviews === 1 ? numReviews + " review" : numReviews + " reviews")}</> : null} </p>
+                        <p id="review">
+                            {Number(avgStars) ? <><FaStar id="star" /> {avgStars} </> : <><FaStar id="star" />{"New"}</>}
+                            {numReviews !== 0 ? <><LuDot style={{ marginLeft: '10px' }} /> {(numReviews === 1 ? numReviews + " review" : numReviews + " reviews")}</> : null}
+                        </p>
                     </div>
                     <div id="button">
                         <button onClick={handleClick}>Reserve</button>
@@ -105,21 +111,26 @@ function SpotDetails() {
                 </div>
             </div>
             <div id="spot-reviews">
-                <h3>{Number(avgStars) ? <><FaStar /> {avgStars} </> : <><FaStar />{"New"}</>} {numReviews !== 0 ? <><LuDot /> {(numReviews === 1 ? numReviews + " review" : numReviews + " reviews")}</> : null}</h3>
+                <h3>
+                    {Number(avgStars) ? <><FaStar /> {avgStars} </> : <><FaStar />{"New"}</>}
+                    {numReviews !== 0 ? <><LuDot style={{ marginLeft: '10px' }} /> {(numReviews === 1 ? numReviews + " review" : numReviews + " reviews")}</> : null}
+                </h3>
                 {numReviews === 0 && spot.Owner?.id !== sessionUserId && <h2>Be the first to post a review!</h2>}
-                {sessionUser && spot.Owner?.id !== sessionUserId && nonReviewer && <OpenModalButton
-                    buttonText="Post Your Review"
-                    onButtonClick={closeMenu}
-                    modalComponent={<ReviewFormModal spotId={spot.id} sessionUser={sessionUser} />}
-                />}
-                {thisReviews ? thisReviews.map(review => (
+                {sessionUser && spot.Owner?.id !== sessionUserId && nonReviewer && (
+                    <OpenModalButton
+                        buttonText="Post Your Review"
+                        onButtonClick={closeMenu}
+                        modalComponent={<ReviewFormModal spotId={spot.id} sessionUser={sessionUser} />}
+                    />
+                )}
+                {sortedReviews.length ? sortedReviews.map(review => (
                     <div id="review-box" key={review.id}>
                         <h3>{review.User && review.User.firstName}</h3>
                         <p>{new Date(review.createdAt).toLocaleDateString("en-us", { month: 'long', year: 'numeric' })}</p>
                         <p>{review.review}</p>
                         {review.User && review.User.id === sessionUserId && (
                             <OpenModalButton
-                                buttonText="Delete Your Review"
+                                buttonText="Delete"
                                 onButtonClick={closeMenu}
                                 modalComponent={<DeleteReviewModal reviewId={review.id} spotId={spot.id} />}
                             />
