@@ -35,7 +35,7 @@ module.exports = {
       },
 {
         ownerId: 1,
-        address: '124 Street St',
+        address: '1290 Street St',
         city: 'Tuliyolal',
         state: 'Yak Tel',
         country: 'Tural',
@@ -47,7 +47,7 @@ module.exports = {
       },
 {
         ownerId: 1,
-        address: '124 Street St',
+        address: '1313 Street St',
         city: 'Tuliyolal',
         state: 'Urqopacha',
         country: 'Tural',
@@ -59,7 +59,7 @@ module.exports = {
       },
 {
         ownerId: 10,
-        address: '128 Street St',
+        address: '1283 Street St',
         city: 'Solution 9',
         state: 'Cyber City',
         country: 'Tural',
@@ -95,7 +95,7 @@ module.exports = {
       },
 {
         ownerId: 12,
-        address: '123 Samurai St',
+        address: '126 Samurai St',
         city: 'Kugane',
         state: 'Ruby Sea',
         country: 'Eorzea',
@@ -107,7 +107,7 @@ module.exports = {
       },
 {
         ownerId: 3,
-        address: '123 Market Board Rd',
+        address: '12311 Market Board Rd',
         city: 'Old Sharlayan',
         state: 'The Hinterlands',
         country: 'Eorzea',
