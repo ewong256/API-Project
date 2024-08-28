@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { useModal } from '../../context/Modal'
 import { createSpotReview, getSpotReviews } from '../../store/reviews'
 import StarRatingInput from './StarRatingInput'
+import './ReviewFormModal.css'
 
 function ReviewFormModal({spotId, sessionUser}) {
     const dispatch = useDispatch()
@@ -34,38 +35,36 @@ function ReviewFormModal({spotId, sessionUser}) {
                 if (data?.errors) {
                     setErrors(data.errors)
                 }
-            });
-    };
+            })
+    }
 
     const settingStar = (number) => {
         setStars(parseInt(number))
-        console.log(stars)
-        console.log(review)
     }
 
     return (
-        <form onSubmit={(handleSubmit)}>
-            <h1> Rate your stay! </h1>
-                {errors.message && (
-                    <p>{errors.message}</p>
-                )}
-                <textarea
-                    type='text'
-                    name='review'
-                    value={review}
-                    placeholder='Review goes here'
-                    onChange={(e) => setReview(e.target.value)}
-                />
-                <StarRatingInput
-                    onChange={settingStar}
-                    stars={stars}
-                />
-                <button
-                    type='submit'
-                    disabled={Object.keys(validationErrors).length > 0}
-                >
-                    Submit Review
-                </button>
+        <form className="review-form" onSubmit={handleSubmit}>
+            <h1>How was your stay?</h1>
+            {errors.message && (
+                <p>{errors.message}</p>
+            )}
+            <textarea
+                type='text'
+                name='review'
+                value={review}
+                placeholder='Leave your review here...'
+                onChange={(e) => setReview(e.target.value)}
+            />
+            <StarRatingInput
+                onChange={settingStar}
+                stars={stars}
+            />
+            <button
+                type='submit'
+                disabled={Object.keys(validationErrors).length > 0}
+            >
+                Submit Your Review
+            </button>
         </form>
     )
 }

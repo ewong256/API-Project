@@ -10,7 +10,7 @@ function Navigation({ isLoaded }) {
     <nav id="navBar">
     <div id="navBar-left">
       <NavLink to="/"><img src="https://res.cloudinary.com/drpidiczb/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1721610685/Vubj_LP9_400x400_rv368p.jpg" /></NavLink>
-      <span id="website-title">XIVNB</span>
+      <NavLink to="/" id="website-title">XIVNB</NavLink>
     </ div>
     <div id='navBar-right'>
     {sessionUser && (

@@ -4,7 +4,7 @@ import { deleteSpotReview } from "../../store/reviews";
 import { getSpotReviews } from "../../store/reviews";
 import './DeleteReviewModal.css'
 
-function DeleteReviewModal({reviewId, spotId}) {
+function DeleteReviewModal({ reviewId, spotId }) {
     const dispatch = useDispatch()
     const { closeModal } = useModal()
 
@@ -15,14 +15,15 @@ function DeleteReviewModal({reviewId, spotId}) {
     }
 
     return (
-        <div>
+        <div className="delete-review-modal-container">
             <h1>Confirm Delete</h1>
-            <p>Are you sure you want to delete your review?</p>
-            <button onClick={targetedRemoval}>Yes</button>
-            <button onClick={closeModal}>No</button>
+            <p>Are you sure you want to delete this review?</p>
+            <div className="confirmation-buttons">
+                <button onClick={targetedRemoval}>Yes (Delete Review)</button>
+                <button onClick={closeModal}>No (Keep Review)</button>
+            </div>
         </div>
     )
 }
-
 
 export default DeleteReviewModal

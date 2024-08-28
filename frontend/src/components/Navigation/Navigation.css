@@ -26,12 +26,26 @@ body {
   font-size: 50px;
   font-weight: bold;
   color: #ff5a5f;
-  margin-top: -5px;
+  margin-top: -10px;
   margin-left: 10px;
 }
 
+
+#navBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+#navBar-right {
+  display: flex;
+  align-items: center;
+}
+
 #spot-create {
-  margin-left: 20px;
+  margin-right: 175px;
+  margin-bottom: 25px;
 }
 
 #spot-create a {

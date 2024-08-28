@@ -19,7 +19,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 10px;
@@ -41,82 +41,75 @@
 .spotName .spotLink {
     text-decoration: none;
     color: inherit;
-}
-
-.spotName .details {
-    margin-right: 10px;
-    display: flex;
-    justify-content: space-between;
     width: 100%;
 }
 
-.createSpotLink {
-    margin-bottom: 20px;
-    text-align: center;
+.spotName .details {
+    margin-right: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
-.delete-spot-button {
+.spotName .spotPrice {
+    color: #000;
+    align-self: flex-start;
     margin-top: 10px;
 }
 
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 400px;
-    text-align: center;
-}
-
-button, .delete-spot-button {
+.delete-spot-button,
+button {
+    margin-top: 10px;
+    align-self: flex-start;
+    background-color: #ff5a5f;
+    color: #fff;
     border: none;
-    border-radius: 8px;
     padding: 10px 15px;
+    border-radius: 8px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-button {
-    background-color: #ff5a5f;
-    color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
 
-button:hover {
+button:hover,
+.delete-spot-button:hover {
     background-color: #ff8a8d;
 }
 
 .delete-spot-button {
     background-color: #ff5a5f;
     color: #fff;
-    padding: 10px 15px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
 }
 
 .delete-spot-button:hover {
     background-color: #ff8a8d;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-button {
-    margin: 5px;
+.spotName {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 300px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.spotName .buttons-container {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+    margin: 0;
+    padding: 0;
+    width: 100%;
 }
 
 .createSpotLink {
@@ -134,4 +127,13 @@ button {
     border-radius: 8px;
     text-decoration: none;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+.yourSpots > :only-child {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%; 
 }
